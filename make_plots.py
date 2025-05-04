@@ -82,7 +82,7 @@ def plot_separately(sol_cen, sol_surf, iteration, mesa=False):
         fig.suptitle('M=1.2 M$_\odot$: MESA comparison', fontsize=16)
 
     plt.tight_layout()
-    if mesa == True:
+    if iteration == 1:
         plt.savefig('figures/separate_initial.pdf', bbox_inches='tight')
     elif iteration == 2:
         plt.savefig('figures/separate_BestFit.pdf', bbox_inches='tight')
@@ -219,14 +219,22 @@ def percent_dif(sol_cen, sol_surf):
     '''
     L_mesa, p = mesa_vals()
 
+    # calculate surface gravity, g = GM/R^2
+    g_mesa = c.G*(p.mass[0]*c.Ms) / (p.R[0]*c.Rs)**2
+    g_model = c.G * (sol_surf.t[0]) / (sol_surf.y[2, 0])**2
+
     # percent difference = abs(difference/average)*100 = abs((x2-x1) / ((x2+x1)/2))*100
     L_dif = np.abs((L_mesa[0] - sol_surf.y[0, 0]) / ((L_mesa[0] + sol_surf.y[0, 0]) / 2)) * 100
     P_dif = np.abs((p.P[-1] - sol_cen.y[1, 0]) / ((p.P[-1] + sol_cen.y[1, 0]) / 2)) * 100
     R_dif = np.abs((p.R[0] * c.Rs - sol_surf.y[2, 0]) / ((p.R[0] * c.Rs + sol_surf.y[2, 0]) / 2)) * 100
-    T_dif = np.abs((p.T[-1] - sol_cen.y[3, 0]) / ((p.T[-1] + sol_cen.y[3, 0]) / 2)) * 100
+    T_dif = np.abs((p.T[0] - sol_surf.y[3, 0]) / ((p.T[0] + sol_surf.y[3, 0]) / 2)) * 100
+    g_dif = np.abs((g_mesa - g_model) / ((g_mesa + g_model) / 2)) * 100
 
     print('Percent Difference:')
     print('Luminosity: {:.2f}'.format(L_dif))
     print('Pressure: {:.2f}'.format(P_dif))
     print('Radius: {:.2f}'.format(R_dif))
     print('Temperature: {:.2f}'.format(T_dif))
+    print('Surface Gravity: {:.2f}'.format(g_dif))
+
+

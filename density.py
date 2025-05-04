@@ -17,7 +17,7 @@ def density(P, T, X=0.7, Y=0.28):
         rho: float
             density (g/cm^3)
     '''
-    mu = 4 / (6*X + Y + 2)  # mean moecular weight
+    mu = 4 / (6*X + Y + 2)  # mean molecular weight
     rho = (P*mu*c.mp) / (c.k*T)  # density
 
     return rho

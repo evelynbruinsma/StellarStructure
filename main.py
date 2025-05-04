@@ -41,10 +41,9 @@ def optimize(guess):
         best_fit: list
             list of optimized best-fit values
     '''
-    scales = [1, 1, 1, 1]
+    scales = [1, 1, 1, 1]  # don't actually want to scale anything, but have to pass it to minimize
     bounds = np.array([[0.5] * 4, [1.5] * 4]).T
     fit = scipy.optimize.minimize(residuals, x0=scales, args=(guess, args), bounds=bounds, method='L-BFGS-B')
-    print('Number of iterations: {}'.format(fit.nit))
     best_fit = initial_guess * fit.x
 
     return best_fit
